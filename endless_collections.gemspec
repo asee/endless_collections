@@ -6,4 +6,6 @@ Gem::Specification.new do |s|
   s.files = `svn -R list`.split("\n")
   s.version = "0.0.1"
 
+  s.add_dependency 'rails', '>= 2.3.11'
+
 end
