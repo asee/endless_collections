@@ -52,7 +52,7 @@ module EndlessCollections
       def data_for_table(offset = nil, limit = nil)
         data = []
 
-        collection_for_report(offset, limit).each do |row|
+        fetch_collection_data(offset, limit).each do |row|
           data_row = {}
           columns.each do |label, col|
             data_row[label] = col.get_data.call(row)
