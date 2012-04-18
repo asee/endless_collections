@@ -35,38 +35,34 @@ module EndlessCollections
   end
 
   class Collection
-
-    # convenience method
-    def columns
-      @@columns
-    end
-
-    def self.columns
-      @@columns
-    end
-
-    def self.define_column(name, options = {})
-      @@columns ||= {}
-
-      col = Column.new(name)
-      yield col if block_given?
-
-      @@columns[name] = col
-    end
-
-    def data_for_table(offset = nil, limit = nil)
-      data = []
-
-      collection_for_report(offset, limit).each do |row|
-        data_row = {}
-        columns.each do |label, col|
-          data_row[label] = col.get_data.call(row)
-        end
-
-        data << data_row
+    class << self
+      def columns
+        @@columns
       end
 
-      data
+      def define_column(name, options = {})
+        @@columns ||= {}
+
+        col = Column.new(name)
+        yield col if block_given?
+
+        @@columns[name] = col
+      end
+
+      def data_for_table(offset = nil, limit = nil)
+        data = []
+
+        collection_for_report(offset, limit).each do |row|
+          data_row = {}
+          columns.each do |label, col|
+            data_row[label] = col.get_data.call(row)
+          end
+
+          data << data_row
+        end
+
+        data
+      end
     end
   end
 end
