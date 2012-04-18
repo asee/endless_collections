@@ -54,10 +54,10 @@ module EndlessCollections
       @@columns[name] = col
     end
 
-    def data_for_table
+    def data_for_table(offset = nil, limit = nil)
       data = []
 
-      collection_for_report.each do |row|
+      collection_for_report(offset, limit).each do |row|
         data_row = {}
         columns.each do |label, col|
           data_row[label] = col.get_data.call(row)
