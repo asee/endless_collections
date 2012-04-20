@@ -7,5 +7,6 @@ Gem::Specification.new do |s|
   s.version = "0.0.1"
 
   s.add_dependency 'rails', '>= 2.3.11'
+  s.add_dependency 'json'
 
 end
