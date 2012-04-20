@@ -20,8 +20,6 @@ module EndlessCollections
               row_offset = params[:start].to_i || nil
               row_limit = params[:end] ? params[:end].to_i - row_offset : nil
 
-              Rails.logger.info("start = #{row_offset} end = #{row_limit}")
-
               render :json => JSON.generate({
                 :resultSet => {
                   :results => collection_class.send(:data_for_table, 
