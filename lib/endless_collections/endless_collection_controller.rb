@@ -14,7 +14,8 @@ module EndlessCollections
 
         define_method action do
           respond_to do |format|
-            format.html 
+            format.html
+              @collection_class = opts[:with] 
             format.js do
               collection_class = opts[:with]
               row_offset = params[:start].to_i || nil
