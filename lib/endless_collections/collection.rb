@@ -35,16 +35,16 @@ module EndlessCollections
   class Collection
     class << self
       def columns
-        @@columns
+        @columns
       end
 
       def define_column(name, options = {}, &block)
-        @@columns ||= {}
+        @columns ||= []
 
         col = Column.new(name, options)
         yield col if block_given?
 
-        @@columns[name] = col
+        @columns << col
       end
 
       def data_for_table(offset = nil, limit = nil)
@@ -52,8 +52,8 @@ module EndlessCollections
 
         fetch_collection_data(offset, limit).each do |row|
           data_row = {}
-          columns.each do |label, col|
-            data_row[label] = col.data.call(row)
+          columns.each do |col|
+            data_row[col.name] = col.data.call(row)
           end
 
           data << data_row
@@ -64,7 +64,7 @@ module EndlessCollections
 
       # TODO make these attributes read from the definitions
       def table_column_defs
-        columns.values.collect do |c|
+        columns.collect do |c|
           {
             "label" => c.label,
             "sortable" => false,
@@ -74,7 +74,7 @@ module EndlessCollections
       end
 
       def response_schema
-        columns.values.collect do |c|
+        columns.collect do |c|
           { "key" => c.name }
         end
       end
