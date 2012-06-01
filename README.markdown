@@ -10,12 +10,10 @@ Ok, to start off, let's just create a basic collection.  We're deliberately igno
 
 ### Define the collection (in /app/models/all_posts_collection.rb)
 ```ruby
-class AllPostsCollection < EndlessReports::Collection
+class AllPostsCollection < EndlessCollections::Collection
   
-  define_column :post_id, 
-    :label => "ID",
-    :data => :id
-
+  # columns with all of the default options
+  define_column :id
   define_column :title 
   
   # Perform an ActiveRecord query, or whatever else gets you a collection.
@@ -35,10 +33,10 @@ end
 ### Set up the controller to show the collection (in /app/controllers/posts_controller.rb)
 ```ruby
 class PostsController < ApplicationController
-  include EndlessCollectionController
+  include EndlessCollections::EndlessCollectionController
   endless_collection :index, :with => AllPostsCollection
 end
-````
+```
 
 ### And we're done!
 
