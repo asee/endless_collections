@@ -33,55 +33,76 @@ module EndlessCollections
   end
 
   class Collection
-    class << self
-      def columns
-        @columns
-      end
 
-      def define_column(name, options = {}, &block)
-        @columns ||= []
+    def initialize(opts = {})
+      unless (opts[:find_default_cols])
+        # attempt to define default columns using the data 
+        first_row = self.fetch_collection_data(0, 1).first
+        if (first_row)
+          # if the row responds to attributes, use them
+          attrs = first_row.try(:attributes)
 
-        col = Column.new(name, options)
-        yield col if block_given?
-
-        @columns << col
-      end
-
-      def data_for_table(offset = nil, limit = nil)
-        data = []
-
-        fetch_collection_data(offset, limit).each do |row|
-          data_row = {}
-          columns.each do |col|
-            data_row[col.name] = col.data.call(row)
+          if (attrs) 
+            attrs.keys.each do |attr|
+              define_column attr
+            end
+          # TODO support hashes
           end
-
-          data << data_row
-        end
-
-        data
-      end
-
-      # TODO make these attributes read from the definitions
-      def table_column_defs
-        columns.collect do |c|
-          {
-            "label" => c.label,
-            "sortable" => false,
-            "key" => c.name
-          }
         end
       end
+    end
 
-      def response_schema
-        columns.collect do |c|
-          { "key" => c.name }
+    # these functions must be defined by the user
+    def fetch_collection_data(offset=nil, limit=nil)
+      raise "The fetch_collection_data method must be defined by your report class"
+    end
+
+    def total_results
+      raise "The total_results method must be defined by your report class"
+    end
+
+    def columns
+      @columns
+    end
+
+    def define_column(name, options = {}, &block)
+      @columns ||= []
+
+      col = Column.new(name, options)
+      yield col if block_given?
+
+      @columns << col
+    end
+
+    def data_for_table(offset = nil, limit = nil)
+      data = []
+
+      fetch_collection_data(offset, limit).each do |row|
+        data_row = {}
+        columns.each do |col|
+          data_row[col.name] = col.data.call(row)
         end
+
+        data << data_row
       end
 
-      # TODO implement this
-      def filter_variables
-        []
+      data
+    end
+
+    # TODO make these attributes read from the definitions
+    def table_column_defs
+      columns.collect do |c|
+        {
+          "label" => c.label,
+          "sortable" => false,
+          "key" => c.name
+        }
+      end
+    end
+
+    def response_schema
+      columns.collect do |c|
+        { "key" => c.name }
       end
     end
   end

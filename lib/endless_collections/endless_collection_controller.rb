@@ -13,20 +13,30 @@ module EndlessCollections
         # collection
 
         define_method action do
+          unless (opts[:with])
+            raise "A collection class or object must be provided"
+          end
+
+          # if we're passed a class, instantiate it.  otherwise, 
+          # just use it directly.
+          if (opts[:with].is_a?(Class)) 
+            @collection = opts[:with].send(:new)
+          else
+            @collection = opts[:with]
+          end
+
           respond_to do |format|
             format.html
-              @collection_class = opts[:with] 
             format.js do
-              collection_class = opts[:with]
               row_offset = params[:start].to_i || nil
               row_limit = params[:end] ? params[:end].to_i - row_offset : nil
 
               render :json => JSON.generate({
                 :resultSet => {
-                  :results => collection_class.send(:data_for_table, 
+                  :results => @collection.data_for_table(
                     row_offset, row_limit),
                   :firstResultPosition => row_offset,
-                  :totalResultsAvailable => collection_class.send(:total_results)
+                  :totalResultsAvailable => @collection.total_results
                 }  
               })
             end

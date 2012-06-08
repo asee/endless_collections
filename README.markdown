@@ -12,10 +12,6 @@ Ok, to start off, let's just create a basic collection.  We're deliberately igno
 ```ruby
 class AllPostsCollection < EndlessCollections::Collection
   
-  # columns with all of the default options
-  define_column :id
-  define_column :title 
-  
   # Perform an ActiveRecord query, or whatever else gets you a collection.
   # Return value must respond to each.  
   def fetch_collection_data(offset=nil, limit=nil)
