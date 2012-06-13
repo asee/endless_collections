@@ -53,11 +53,11 @@ module EndlessCollections
     end
 
     # these functions must be defined by the user
-    def fetch_collection_data(offset=nil, limit=nil)
+    def fetch_collection_data(offset=nil, limit=nil, opts = {})
       raise "The fetch_collection_data method must be defined by your report class"
     end
 
-    def total_results
+    def total_results(opts = {})
       raise "The total_results method must be defined by your report class"
     end
 
@@ -74,10 +74,10 @@ module EndlessCollections
       @columns << col
     end
 
-    def data_for_table(offset = nil, limit = nil)
+    def data_for_table(offset = nil, limit = nil, opts = {})
       data = []
 
-      fetch_collection_data(offset, limit).each do |row|
+      fetch_collection_data(offset, limit, opts).each do |row|
         data_row = {}
         columns.each do |col|
           data_row[col.name] = col.data.call(row)

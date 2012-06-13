@@ -34,9 +34,9 @@ module EndlessCollections
               render :json => JSON.generate({
                 :resultSet => {
                   :results => @collection.data_for_table(
-                    row_offset, row_limit),
+                    row_offset, row_limit, params.except(:start, :end)),
                   :firstResultPosition => row_offset,
-                  :totalResultsAvailable => @collection.total_results
+                  :totalResultsAvailable => @collection.total_results(params.except(:start, :end))
                 }  
               })
             end
