@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name = 'endless_collection_rails2.3'
+  s.name = 'endless_collection_rails2'
   s.authors = ['ASEE']
   s.summary = 'Endless Collections for Rails'
   s.description = 'Back-end infrastructure for Endless Collections.  Requires front-end package as well to work correctly.'
