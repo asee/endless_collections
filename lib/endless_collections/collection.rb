@@ -62,7 +62,12 @@ module EndlessCollections
     end
 
     def columns
-      @columns
+      @columns.values
+    end
+
+    # this should be overridden if the user wants to select their columns
+    def columns_for_display
+      columns
     end
 
     def define_column(name, options = {}, &block)
@@ -79,7 +84,7 @@ module EndlessCollections
 
       fetch_collection_data(offset, limit, opts).each do |row|
         data_row = {}
-        columns.values.each do |col|
+        columns_for_display.each do |col|
           data_row[col.name] = col.data.call(row)
         end
 
@@ -89,9 +94,8 @@ module EndlessCollections
       data
     end
 
-    # TODO make these attributes read from the definitions
     def table_column_defs
-      columns.values.collect do |c|
+      columns_for_display.collect do |c|
         {
           "label" => c.label,
           "sortable" => false,
@@ -101,7 +105,7 @@ module EndlessCollections
     end
 
     def response_schema
-      columns.values.collect do |c|
+      columns_for_display.collect do |c|
         { "key" => c.name }
       end
     end
