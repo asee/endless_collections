@@ -27,6 +27,7 @@ module EndlessCollections
 
           respond_to do |format|
             format.html
+              # TODO accept a block here
             format.js do
               row_offset = params[:start].to_i || nil
               row_limit = params[:end] ? params[:end].to_i - row_offset : nil
