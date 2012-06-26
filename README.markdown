@@ -1,6 +1,6 @@
 # Endless Collections
 
-** Endless Collections is still undergoing heavy development and is considered incomplete. **
+**Endless Collections is still undergoing heavy development and is considered incomplete.**
 
 This library creates nifty-looking tables!  
 
