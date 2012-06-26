@@ -6,6 +6,8 @@ module EndlessCollections
       @name = name
       @label = options[:label] || @name.to_s.titleize
       @data = Proc.new { |row| row[name] } 
+      @resizeable = options.has_key?(:resizeable) ? options[:resizeable] : true
+      @sortable = options.has_key?(:sortable) ? options[:sortable] : false
     end
 
     def name
@@ -28,6 +30,14 @@ module EndlessCollections
         @data = Proc.new { |row| row[field] } 
       end
       @data
+    end
+
+    def resizeable
+      @resizeable
+    end
+
+    def sortable
+      @sortable
     end
 
   end
@@ -98,8 +108,8 @@ module EndlessCollections
       columns_for_display.collect do |c|
         {
           "label" => c.label,
-          "sortable" => false,
-          "resizeable" => true,
+          "sortable" => c.sortable,
+          "resizeable" => c.resizeable,
           "key" => c.name
         }
       end
