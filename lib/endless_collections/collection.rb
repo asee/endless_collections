@@ -99,6 +99,7 @@ module EndlessCollections
         {
           "label" => c.label,
           "sortable" => false,
+          "resizeable" => true,
           "key" => c.name
         }
       end
