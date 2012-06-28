@@ -50,13 +50,18 @@ module EndlessCollections
         first_row = self.fetch_collection_data(0, 1).first
         if (first_row)
           # if the row responds to attributes, use them
-          attrs = first_row.try(:attributes)
+          if (first_row.respond_to?(:attributes))
+            attrs = first_row.attributes
 
-          if (attrs) 
             attrs.keys.each do |attr|
               define_column attr
             end
-          # TODO support hashes
+          elsif (first_row.respond_to?(:keys))
+            attrs = first_row.keys
+
+            attrs.each do |attr|
+              define_column attr
+            end            
           end
         end
       end
