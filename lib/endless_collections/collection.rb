@@ -6,7 +6,7 @@ module EndlessCollections
       @name = name
       @label = options[:label] || @name.to_s.titleize
       @data = Proc.new { |row| row[name] } 
-      @resizeable = options.has_key?(:resizeable) ? options[:resizeable] : true
+      @resizeable = options.has_key?(:resizeable) ? options[:resizeable] : false
       @sortable = options.has_key?(:sortable) ? options[:sortable] : false
     end
 
@@ -45,6 +45,11 @@ module EndlessCollections
   class Collection
 
     def initialize(opts = {})
+      @default_sortable = opts.has_key?(:default_sortable) ? 
+        opts[:default_sortable] : @default_sortable = false
+      @default_resizeable = opts.has_key?(:default_resizeable) ? 
+        opts[:default_resizeable] : @default_resizeable = false
+      
       unless (opts[:find_default_cols])
         # attempt to define default columns using the data 
         first_row = self.fetch_collection_data(0, 1).first
@@ -87,6 +92,13 @@ module EndlessCollections
 
     def define_column(name, options = {}, &block)
       @columns ||= {}
+
+      unless (options.has_key?(:resizeable))
+        options[:resizeable] = @default_resizeable
+      end
+      unless (options.has_key?(:sortable))
+        options[:sortable] = @default_sortable
+      end
 
       col = Column.new(name, options)
       yield col if block_given?
