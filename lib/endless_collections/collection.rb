@@ -90,6 +90,10 @@ module EndlessCollections
       columns
     end
 
+    def sortable_columns
+      columns.select{|c| c.sortable}
+    end
+
     def define_column(name, options = {}, &block)
       @columns ||= {}
 
